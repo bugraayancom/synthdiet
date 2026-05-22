@@ -5,6 +5,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/bugraayancom/synthdiet/actions/workflows/ci.yml/badge.svg)](https://github.com/bugraayancom/synthdiet/actions/workflows/ci.yml)
 
+> Other languages: [Türkçe](README.tr.md) · [Español](README.es.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Português](README.pt.md) · [Italiano](README.it.md) · [中文](README.zh.md) · [日本語](README.ja.md)
+
 A Python library for generating synthetic patients with realistic clinical
 conditions and simulating dietary interventions on them.
 
@@ -151,8 +153,11 @@ src/synthdiet/
 └── utils/             # Constants, validators, random-state helpers
 ```
 
-Tutorials live in [`docs/tutorials/`](docs/tutorials/) and a draft JOSS
-paper lives in [`paper/`](paper/).
+Tutorials live in [`docs/tutorials/`](docs/tutorials/) (English) and in
+language-specific subfolders (`docs/tr/`, `docs/es/`, `docs/fr/`,
+`docs/de/`, `docs/pt/`, `docs/it/`, `docs/zh/`, `docs/ja/`).
+A draft JOSS paper lives in [`paper/`](paper/). See
+[`docs/README.md`](docs/README.md) for the full multilingual index.
 
 ---
 

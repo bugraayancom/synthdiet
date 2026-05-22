@@ -1,5 +1,7 @@
 # synthdiet documentation
 
+> Other languages: [Türkçe](tr/index.md) · [Español](es/index.md) · [Français](fr/index.md) · [Deutsch](de/index.md) · [Português](pt/index.md) · [Italiano](it/index.md) · [中文](zh/index.md) · [日本語](ja/index.md)
+
 `synthdiet` is a Python library for generating synthetic patients with
 realistic clinical conditions and simulating dietary interventions on them.
 
