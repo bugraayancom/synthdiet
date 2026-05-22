@@ -50,3 +50,6 @@ docs/_autosummary/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# personal / non-public artefacts
+.private/
