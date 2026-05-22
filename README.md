@@ -89,9 +89,22 @@ Optional extras:
 ```bash
 pip install "synthdiet[viz]"     # matplotlib visualisations
 pip install "synthdiet[causal]"  # networkx DAG export
+pip install "synthdiet[app]"     # Streamlit + Plotly interactive app
 pip install "synthdiet[docs]"    # Sphinx + furo + myst-parser
 pip install "synthdiet[dev]"     # pytest + ruff + mypy + matplotlib
 ```
+
+### Try the interactive app
+
+```bash
+pip install "synthdiet[app]"
+streamlit run app/streamlit_app.py
+```
+
+A multi-page Streamlit interface (Home / Cohort Builder / Diet Simulator
+/ RCT Engine / Case Studies) with animated Plotly charts, CONSORT flow
+and OSCE grading. See [`app/README.md`](app/README.md) for details and
+Streamlit Community Cloud deployment instructions.
 
 `synthdiet` requires Python 3.9+ and depends on `numpy`, `pandas`, and `scipy`.
 

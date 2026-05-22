@@ -1,0 +1,12 @@
+# Streamlit Community Cloud picks this file up automatically.
+# Local users should normally install via:
+#   pip install "synthdiet[app]"
+#
+# But this file lets cloud deployment work even without the optional extra.
+
+synthdiet>=0.1.0
+streamlit>=1.32
+plotly>=5.18
+pandas>=2.0
+numpy>=1.24
+scipy>=1.10

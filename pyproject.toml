@@ -54,6 +54,10 @@ docs = [
 causal = [
     "networkx>=3.0",
 ]
+app = [
+    "streamlit>=1.32",
+    "plotly>=5.18",
+]
 dev = [
     "pytest>=7.4",
     "pytest-cov>=4.1",
