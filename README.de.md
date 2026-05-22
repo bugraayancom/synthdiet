@@ -22,6 +22,8 @@ stresstesten möchten, bevor sie in die Klinik gelangen.
 > Patientenversorgung wenden Sie sich stets an eine\*n qualifizierte\*n
 > registrierte\*n Diätassistent\*in.
 
+![synthdiet hero](app/assets/screenshots/00_hero.png)
+
 ---
 
 ## Autor

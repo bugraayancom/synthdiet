@@ -1,8 +1,10 @@
 """Reusable UI building blocks for the synthdiet Streamlit app.
 
 All components are pure-Python helpers that emit HTML/CSS via
-``st.markdown(..., unsafe_allow_html=True)`` so the visual style stays
-consistent across pages.
+``st.markdown(..., unsafe_allow_html=True)``. Every HTML chunk is run
+through :func:`textwrap.dedent` + ``strip`` first; without that the
+common 4-space indentation in source-level f-strings would be parsed as
+a Markdown code block by Streamlit's renderer.
 """
 from __future__ import annotations
 
@@ -15,6 +17,31 @@ import streamlit as st
 
 APP_DIR = Path(__file__).resolve().parent
 STYLE_PATH = APP_DIR / "style.css"
+
+
+# ---------------------------------------------------------------------------
+# Internal helpers
+# ---------------------------------------------------------------------------
+def _html(markup: str, *, sidebar: bool = False) -> None:
+    """Render an arbitrary HTML chunk safely.
+
+    Strips common leading whitespace before passing to Streamlit so the
+    Markdown engine doesn't interpret indentation as a code block.
+    """
+    cleaned = textwrap.dedent(markup).strip()
+    target = st.sidebar if sidebar else st
+    target.markdown(cleaned, unsafe_allow_html=True)
+
+
+def render_html(markup: str) -> None:
+    """Public helper: dedent + strip a multi-line HTML block, then render.
+
+    Use this from page modules instead of ``st.markdown(html, unsafe_allow_html=True)``
+    when the HTML is built from a triple-quoted f-string with leading
+    indentation — Streamlit's Markdown parser would otherwise treat the
+    4-space indent as a fenced code block.
+    """
+    _html(markup)
 
 
 def inject_global_styles() -> None:
@@ -43,34 +70,20 @@ def page_setup(
 
 def _sidebar_brand() -> None:
     """Render a small branded header in the sidebar."""
-    with st.sidebar:
-        st.markdown(
-            """
-            <div style="
-                padding: 14px 4px 18px 4px;
-                border-bottom: 1px solid var(--sd-border);
-                margin-bottom: 8px;
-            ">
-              <div style="display:flex; align-items:center; gap:10px;">
-                <div style="
-                    width:34px; height:34px; border-radius:10px;
-                    background: linear-gradient(135deg, #0EA5E9, #10B981);
-                    display:flex; align-items:center; justify-content:center;
-                    color:white; font-weight:800; font-size:14px;
-                ">sd</div>
-                <div>
-                  <div style="font-weight:800; font-size:15px; letter-spacing:-0.01em;">
-                    synthdiet
-                  </div>
-                  <div style="font-size:11px; color: var(--sd-text-muted);">
-                    synthetic patients · diet simulation
-                  </div>
-                </div>
-              </div>
+    _html(
+        """
+        <div style="padding: 14px 4px 18px 4px; border-bottom: 1px solid var(--sd-border); margin-bottom: 8px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:34px; height:34px; border-radius:10px; background: linear-gradient(135deg, #0EA5E9, #10B981); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:14px;">sd</div>
+            <div>
+              <div style="font-weight:800; font-size:15px; letter-spacing:-0.01em;">synthdiet</div>
+              <div style="font-size:11px; color: var(--sd-text-muted);">synthetic patients · diet simulation</div>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+          </div>
+        </div>
+        """,
+        sidebar=True,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -81,7 +94,7 @@ def hero(
     eyebrow: str,
     title_html: str,
     subtitle: str,
-    stats: Sequence[tuple[str, str | None]] = None,
+    stats: Sequence[tuple[str, str]] | None = None,
 ) -> None:
     """Render the home-page hero block.
 
@@ -97,18 +110,15 @@ def hero(
         )
         stats_html = f'<div class="sd-hero-stats">{stat_items}</div>'
 
-    st.markdown(
+    _html(
         f"""
         <div class="sd-hero">
-          <span class="sd-hero-eyebrow">
-            <span class="pulse"></span>{html.escape(eyebrow)}
-          </span>
-          <h1 class="sd-hero-title">{title_html}</h1>
-          <p class="sd-hero-sub">{html.escape(subtitle)}</p>
-          {stats_html}
+        <span class="sd-hero-eyebrow"><span class="pulse"></span>{html.escape(eyebrow)}</span>
+        <h1 class="sd-hero-title">{title_html}</h1>
+        <p class="sd-hero-sub">{html.escape(subtitle)}</p>
+        {stats_html}
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
@@ -117,14 +127,13 @@ def hero(
 # ---------------------------------------------------------------------------
 def section(title: str, meta: str | None = None) -> None:
     meta_html = f'<span class="meta">{html.escape(meta)}</span>' if meta else ""
-    st.markdown(
+    _html(
         f"""
         <div class="sd-section-header">
-          <h2>{html.escape(title)}</h2>
-          {meta_html}
+        <h2>{html.escape(title)}</h2>
+        {meta_html}
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
@@ -136,35 +145,29 @@ def feature_grid(features: Iterable[tuple[str, str, str]]) -> None:
 
     Each tuple is ``(icon, title, description)``.
     """
-    cards = []
-    for icon, title, desc in features:
-        cards.append(
-            f"""
-            <div class="sd-feature">
-              <div class="sd-feature-icon">{icon}</div>
-              <h3>{html.escape(title)}</h3>
-              <p>{html.escape(desc)}</p>
-            </div>
-            """
+    cards = "".join(
+        (
+            f'<div class="sd-feature">'
+            f'<div class="sd-feature-icon">{icon}</div>'
+            f'<h3>{html.escape(title)}</h3>'
+            f'<p>{html.escape(desc)}</p>'
+            f'</div>'
         )
-    st.markdown(
-        f'<div class="sd-feature-grid">{"".join(cards)}</div>',
-        unsafe_allow_html=True,
+        for icon, title, desc in features
     )
+    _html(f'<div class="sd-feature-grid">{cards}</div>')
 
 
 # ---------------------------------------------------------------------------
 # Metric grid
 # ---------------------------------------------------------------------------
-def metric_grid(
-    items: Sequence[tuple[str, str, str | None, str]],
-) -> None:
+def metric_grid(items: Sequence[tuple[str, str, str | None, str]]) -> None:
     """Render a grid of metric cards.
 
     Each tuple is ``(label, value, trend_text_or_None, tone)`` where ``tone``
     is one of ``"primary" | "success" | "warning" | "danger" | ""``.
     """
-    cards = []
+    parts = []
     for label, value, trend, tone in items:
         tone_cls = f" tone-{tone}" if tone else ""
         trend_html = ""
@@ -175,19 +178,14 @@ def metric_grid(
             elif trend.startswith("-") or trend.lower().startswith("↓"):
                 cls = "neg"
             trend_html = f'<div class="trend {cls}">{html.escape(trend)}</div>'
-        cards.append(
-            f"""
-            <div class="sd-metric{tone_cls}">
-              <div class="label">{html.escape(label)}</div>
-              <div class="value">{html.escape(value)}</div>
-              {trend_html}
-            </div>
-            """
+        parts.append(
+            f'<div class="sd-metric{tone_cls}">'
+            f'<div class="label">{html.escape(label)}</div>'
+            f'<div class="value">{html.escape(value)}</div>'
+            f'{trend_html}'
+            f'</div>'
         )
-    st.markdown(
-        f'<div class="sd-metric-grid">{"".join(cards)}</div>',
-        unsafe_allow_html=True,
-    )
+    _html(f'<div class="sd-metric-grid">{"".join(parts)}</div>')
 
 
 # ---------------------------------------------------------------------------
@@ -201,28 +199,23 @@ def patient_card(
     sub: str,
     chips: Iterable[tuple[str, str]] = (),
 ) -> None:
-    """Render a single patient row card.
-
-    ``chips`` is an iterable of ``(label, kind)`` where ``kind`` is one of
-    ``"" | "dx" | "dx-renal" | "dx-cardio" | "dx-endo"``.
-    """
+    """Render a single patient row card."""
     sex_cls = "f" if sex.lower().startswith("f") else "m"
     chips_html = "".join(
         f'<span class="sd-chip {html.escape(kind)}">{html.escape(label)}</span>'
         for label, kind in chips
     )
-    st.markdown(
+    _html(
         f"""
         <div class="sd-patient-card">
-          <div class="sd-avatar {sex_cls}">{html.escape(initials)}</div>
-          <div class="sd-patient-meta">
-            <div class="name">{html.escape(name)}</div>
-            <div class="sub">{html.escape(sub)}</div>
-          </div>
-          <div>{chips_html}</div>
+        <div class="sd-avatar {sex_cls}">{html.escape(initials)}</div>
+        <div class="sd-patient-meta">
+        <div class="name">{html.escape(name)}</div>
+        <div class="sub">{html.escape(sub)}</div>
         </div>
-        """,
-        unsafe_allow_html=True,
+        <div>{chips_html}</div>
+        </div>
+        """
     )
 
 
@@ -231,31 +224,23 @@ def patient_card(
 # ---------------------------------------------------------------------------
 def callout(text_html: str, tone: str = "info") -> None:
     cls = {"info": "", "warning": " warning", "success": " success"}.get(tone, "")
-    st.markdown(
-        f'<div class="sd-callout{cls}">{text_html}</div>',
-        unsafe_allow_html=True,
-    )
+    _html(f'<div class="sd-callout{cls}">{text_html}</div>')
 
 
 # ---------------------------------------------------------------------------
 # Disclaimer
 # ---------------------------------------------------------------------------
 def disclaimer() -> None:
-    st.markdown(
-        textwrap.dedent(
-            """
-            <div class="sd-disclaimer">
-              <strong>Disclaimer.</strong>
-              <code>synthdiet</code> is a research and teaching tool.
-              The patients generated in this interface are
-              <strong>not real</strong>; the numbers shown
-              <strong>cannot be used as clinical recommendations</strong>.
-              For patient care always consult a qualified registered
-              dietitian.
-            </div>
-            """
-        ),
-        unsafe_allow_html=True,
+    _html(
+        """
+        <div class="sd-disclaimer">
+        <strong>Disclaimer.</strong>
+        <code>synthdiet</code> is a research and teaching tool.
+        The patients generated in this interface are <strong>not real</strong>;
+        the numbers shown <strong>cannot be used as clinical recommendations</strong>.
+        For patient care always consult a qualified registered dietitian.
+        </div>
+        """
     )
 
 
@@ -263,16 +248,12 @@ def disclaimer() -> None:
 # ECG / pulse waveform (decorative)
 # ---------------------------------------------------------------------------
 def ecg_waveform() -> None:
-    st.markdown(
+    _html(
         """
         <svg class="sd-ecg" viewBox="0 0 600 60" preserveAspectRatio="none">
-          <path class="sd-ecg-path"
-                d="M0,30 L80,30 L100,30 L110,10 L120,50 L130,30 L200,30
-                   L220,30 L230,15 L240,45 L250,30 L320,30 L340,30 L350,5
-                   L360,55 L370,30 L600,30"/>
+        <path class="sd-ecg-path" d="M0,30 L80,30 L100,30 L110,10 L120,50 L130,30 L200,30 L220,30 L230,15 L240,45 L250,30 L320,30 L340,30 L350,5 L360,55 L370,30 L600,30"/>
         </svg>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 

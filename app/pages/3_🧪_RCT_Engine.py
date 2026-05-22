@@ -80,6 +80,12 @@ OUTCOME_LABELS = {
 }
 
 
+def _adherence(result) -> dict:
+    """Return adherence summary as a dict, regardless of attribute / method API."""
+    s = getattr(result, "adherence_summary", {})
+    return s() if callable(s) else (s or {})
+
+
 # ---------------------------------------------------------------------------
 # Plotly polish
 # ---------------------------------------------------------------------------
@@ -160,9 +166,12 @@ def _consort_diagram(
             align="center",
         )
 
-    arrows = [
+    # Connectors: simple straight lines + a small triangle marker at the
+    # tail to act as an arrow. Avoids the Plotly 6.x deprecation of
+    # ``axref="paper"`` on annotations.
+    connectors = [
         # (x0, y0, x1, y1)
-        (0.5, 0.85, 0.5, 0.75),  # eligibility -> randomised
+        (0.5, 0.85, 0.5, 0.75),   # eligibility -> randomised
         (0.5, 0.65, 0.25, 0.50),  # randomised -> arm A
         (0.5, 0.65, 0.75, 0.50),  # randomised -> arm B
         (0.25, 0.40, 0.25, 0.30),  # arm A -> withdrew
@@ -170,13 +179,28 @@ def _consort_diagram(
         (0.25, 0.20, 0.25, 0.12),  # arm A -> analysed
         (0.75, 0.20, 0.75, 0.12),  # arm B -> analysed
     ]
-    for x0, y0, x1, y1 in arrows:
-        fig.add_annotation(
-            xref="paper", yref="paper",
-            x=x1, y=y1, ax=x0, ay=y0, axref="paper", ayref="paper",
-            showarrow=True, arrowhead=2, arrowsize=1.2, arrowwidth=1.5,
-            arrowcolor="#94A3B8",
+    arrow_xs: list[float] = []
+    arrow_ys: list[float] = []
+    for x0, y0, x1, y1 in connectors:
+        fig.add_shape(
+            type="line", xref="paper", yref="paper",
+            x0=x0, y0=y0, x1=x1, y1=y1,
+            line=dict(color="#94A3B8", width=1.5),
         )
+        arrow_xs.append(x1)
+        arrow_ys.append(y1)
+    fig.add_trace(
+        go.Scatter(
+            x=arrow_xs,
+            y=arrow_ys,
+            xaxis="x",
+            yaxis="y",
+            mode="markers",
+            marker=dict(symbol="triangle-down", size=10, color="#94A3B8"),
+            hoverinfo="skip",
+            showlegend=False,
+        )
+    )
 
     fig.update_xaxes(visible=False, range=[0, 1])
     fig.update_yaxes(visible=False, range=[-0.05, 1.05])
@@ -510,7 +534,12 @@ def main() -> None:
     arm_counts = df["arm"].value_counts()
     n_a_rand = int(arm_counts.get("control", 0))
     n_b_rand = int(arm_counts.get("intervention", 0))
-    completed = df[df["dropout_week"].isna()]
+    # A patient "completed" the trial iff their dropout_week is missing
+    # OR exceeds the planned duration (the engine writes duration_weeks + 1
+    # for completers).
+    dw = df["dropout_week"]
+    completed_mask = dw.isna() | (dw > int(duration_weeks))
+    completed = df[completed_mask]
     n_a_compl = int((completed["arm"] == "control").sum())
     n_b_compl = int((completed["arm"] == "intervention").sum())
 
@@ -561,7 +590,7 @@ def main() -> None:
             ),
             (
                 "Mean adherence",
-                f"{result.adherence_summary().get('intervention', 0):.0%}",
+                f"{_adherence(result).get('intervention', 0):.0%}",
                 "intervention arm",
                 "",
             ),

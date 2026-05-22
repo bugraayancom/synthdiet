@@ -17,6 +17,8 @@
 > **不是临床建议**,合成患者**也不是真实人物**。患者诊疗请始终
 > 咨询合格的注册营养师/临床营养师。
 
+![synthdiet hero](app/assets/screenshots/00_hero.png)
+
 ---
 
 ## 作者

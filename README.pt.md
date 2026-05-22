@@ -20,6 +20,8 @@ milhares de pacientes sintéticos antes de levá-las à prática clínica.
 > sintéticos **não são pessoas reais**. Para o cuidado de pacientes
 > reais, consulte sempre um(a) nutricionista qualificado(a).
 
+![synthdiet hero](app/assets/screenshots/00_hero.png)
+
 ---
 
 ## Autor

@@ -25,6 +25,7 @@ from components import (  # noqa: E402
     hero,
     metric_grid,
     page_setup,
+    render_html,
     section,
 )
 
@@ -274,15 +275,14 @@ def _diet_gallery(selected: str) -> str:
         is_selected = name == selected
         with cols[i % 4]:
             cls = "selected" if is_selected else ""
-            st.markdown(
+            render_html(
                 f"""
                 <div class="sd-diet-card {cls}">
                   <span class="emoji">{meta['emoji']}</span>
                   <div class="name">{meta['name']}</div>
                   <div class="desc">{meta['desc']}</div>
                 </div>
-                """,
-                unsafe_allow_html=True,
+                """
             )
             if st.button(
                 "Selected ✓" if is_selected else "Select",
@@ -429,7 +429,7 @@ def main() -> None:
     section("Patient & plan", meta=f"diet: {diet_meta['name']}")
     col_a, col_b = st.columns([1.2, 1])
     with col_a:
-        st.markdown(
+        render_html(
             f"""
             <div class="sd-patient-card" style="margin-bottom:14px;">
               <div class="sd-avatar {sex_cls}">P{int(patient_row['id'])+1:02d}</div>
@@ -444,11 +444,10 @@ def main() -> None:
               </div>
               <div>{chips_html}</div>
             </div>
-            """,
-            unsafe_allow_html=True,
+            """
         )
     with col_b:
-        st.markdown(
+        render_html(
             f"""
             <div class="sd-feature" style="animation:none;">
               <div class="sd-feature-icon">{diet_meta['emoji']}</div>
@@ -459,8 +458,7 @@ def main() -> None:
                 adherence {adherence:.0%} · engine: {engine}
               </div>
             </div>
-            """,
-            unsafe_allow_html=True,
+            """
         )
 
     # ------------------------------------------------------------------

@@ -19,6 +19,8 @@ migliaia di pazienti sintetici prima di portarle in clinica.
 > sintetici **non sono persone reali**. Per la cura del paziente
 > consultare sempre un dietista qualificato.
 
+![synthdiet hero](app/assets/screenshots/00_hero.png)
+
 ---
 
 ## Autore

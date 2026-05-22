@@ -20,6 +20,7 @@ from components import (  # noqa: E402
     hero,
     metric_grid,
     page_setup,
+    render_html,
     section,
 )
 
@@ -165,12 +166,11 @@ def main() -> None:
             tags_html = "".join(
                 f'<span class="sd-chip">{t}</span>' for t in sorted(c.tags)[:5]
             )
-            st.markdown(
+            render_html(
                 f"""
                 <div class="sd-feature" style="animation-delay:{i*0.04}s;">
                   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                    <div style="font-size:13px; font-weight:700; color:#0284C7;
-                                font-family:'JetBrains Mono', monospace;">
+                    <div style="font-size:13px; font-weight:700; color:#0284C7; font-family:'JetBrains Mono', monospace;">
                       {c.case_id}
                     </div>
                     {_difficulty_chip(c.difficulty)}
@@ -182,8 +182,7 @@ def main() -> None:
                     ⏱ {c.estimated_minutes} min · {len(c.learning_objectives)} learning objectives
                   </div>
                 </div>
-                """,
-                unsafe_allow_html=True,
+                """
             )
             if st.button(
                 f"Open {c.case_id} →",

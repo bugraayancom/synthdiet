@@ -22,6 +22,8 @@ synthétiques avant de les amener en clinique.
 > pas de vraies personnes**. Pour la prise en charge des patients,
 > référez-vous toujours à un diététicien-nutritionniste qualifié.
 
+![synthdiet hero](app/assets/screenshots/00_hero.png)
+
 ---
 
 ## Auteur

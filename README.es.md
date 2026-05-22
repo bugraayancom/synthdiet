@@ -21,6 +21,8 @@ clínica.
 > pacientes sintéticos **no son personas reales**. Para la atención al
 > paciente consulte siempre a un dietista-nutricionista cualificado.
 
+![synthdiet hero](app/assets/screenshots/00_hero.png)
+
 ---
 
 ## Autor

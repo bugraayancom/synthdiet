@@ -3,20 +3,57 @@
 An interactive multi-page web interface for the
 [`synthdiet`](https://github.com/bugraayancom/synthdiet) Python library.
 
-It exposes the full workflow visually:
-
-| Page | What it does |
-|------|--------------|
-| 🩺 Home | Project overview, hero, feature grid, quick links. |
-| 📋 Cohort Builder | Interactive prevalence sliders → live age × sex × BMI × diagnosis distributions, CSV export. |
-| 🍽️ Diet Simulator | Apply any of 8 preset diets to a single patient and watch HbA1c, BP, LDL and weight trajectories animate week-by-week. |
-| 🧪 RCT Engine | Set up a parallel-arm trial, run with Weibull dropout + adherence, view CONSORT flow, forest plot, ITT / per-protocol / as-treated. |
-| 📚 Case Studies | Browse the 15 built-in clinical cases, filter by difficulty / tag, and grade student diet plans with the OSCE rubric. |
-| ℹ️ About | Author, citation, license, deployment instructions. |
+![synthdiet — hero](assets/screenshots/00_hero.png)
 
 The visual style is "clinical clean": white background, medical
 blue / green accents, glassmorphism cards, smooth fade-up animations
 and animated Plotly charts.
+
+## Pages
+
+### 🩺 Home
+
+Project overview, hero, feature grid, quick links.
+
+![Home](assets/screenshots/01_home.png)
+
+### 📋 Cohort Builder
+
+Interactive prevalence sliders → live age × sex × BMI × diagnosis
+distributions, CSV export. The cohort persists in
+``st.session_state`` and is reused by every downstream page.
+
+![Cohort Builder](assets/screenshots/02_cohort_builder.png)
+
+### 🍽️ Diet Simulator
+
+Apply any of 8 preset diets to a single patient and watch HbA1c,
+blood pressure, LDL and weight trajectories animate week by week
+(Plotly frame animation with Play / Pause).
+
+![Diet Simulator](assets/screenshots/03_diet_simulator.png)
+
+### 🧪 RCT Engine
+
+Set up a parallel-arm trial with Weibull dropout, configurable
+adherence and randomisation strategy, then read the trial through
+ITT / per-protocol / as-treated lenses with a custom CONSORT flow
+diagram and forest plot.
+
+![RCT Engine](assets/screenshots/04_rct_engine.png)
+
+### 📚 Case Studies
+
+Browse the 15 built-in clinical cases, filter by difficulty or tag,
+and grade student diet plans with the OSCE rubric.
+
+![Case Studies](assets/screenshots/05_case_studies.png)
+
+### ℹ️ About
+
+Author, citation, license, deployment instructions.
+
+![About](assets/screenshots/06_about.png)
 
 ---
 

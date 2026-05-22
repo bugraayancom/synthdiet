@@ -7,6 +7,8 @@
 
 > Diğer diller: [English](README.md) · [Español](README.es.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Português](README.pt.md) · [Italiano](README.it.md) · [中文](README.zh.md) · [日本語](README.ja.md)
 
+![synthdiet hero](app/assets/screenshots/00_hero.png)
+
 Gerçekçi klinik tablolara sahip **sentetik hastalar** üreten ve bu hastalar
 üzerinde **diyet müdahalelerini simüle eden** bir Python kütüphanesi.
 

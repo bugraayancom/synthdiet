@@ -10,6 +10,8 @@
 A Python library for generating synthetic patients with realistic clinical
 conditions and simulating dietary interventions on them.
 
+![synthdiet hero](app/assets/screenshots/00_hero.png)
+
 `synthdiet` is built for dietitians, clinical-nutrition researchers, and
 educators who want to prototype diets, run virtual trials, and stress-test
 nutritional recommendations against hundreds or thousands of synthetic
@@ -101,10 +103,15 @@ pip install "synthdiet[app]"
 streamlit run app/streamlit_app.py
 ```
 
-A multi-page Streamlit interface (Home / Cohort Builder / Diet Simulator
-/ RCT Engine / Case Studies) with animated Plotly charts, CONSORT flow
-and OSCE grading. See [`app/README.md`](app/README.md) for details and
-Streamlit Community Cloud deployment instructions.
+A multi-page Streamlit interface with animated Plotly charts, a custom
+CONSORT flow diagram and OSCE-style grading. See
+[`app/README.md`](app/README.md) for full details and Streamlit Community
+Cloud deployment instructions.
+
+| | |
+|---|---|
+| <a href="app/assets/screenshots/02_cohort_builder.png"><img src="app/assets/screenshots/02_cohort_builder.png" alt="Cohort Builder" width="100%"></a><br/>**📋 Cohort Builder** — interactive prevalence sliders → live age × sex × BMI × diagnosis distributions, CSV export. | <a href="app/assets/screenshots/03_diet_simulator.png"><img src="app/assets/screenshots/03_diet_simulator.png" alt="Diet Simulator" width="100%"></a><br/>**🍽️ Diet Simulator** — pick any of 8 preset diets and watch HbA1c, BP, LDL and weight trajectories animate week by week. |
+| <a href="app/assets/screenshots/04_rct_engine.png"><img src="app/assets/screenshots/04_rct_engine.png" alt="RCT Engine" width="100%"></a><br/>**🧪 RCT Engine** — parallel-arm trials with Weibull dropout, custom CONSORT flow diagram, forest plot and ITT/PP/AT analyses. | <a href="app/assets/screenshots/05_case_studies.png"><img src="app/assets/screenshots/05_case_studies.png" alt="Case Studies" width="100%"></a><br/>**📚 Case Studies** — 15 built-in clinical scenarios with OSCE-style automatic grading of student diet plans. |
 
 `synthdiet` requires Python 3.9+ and depends on `numpy`, `pandas`, and `scipy`.
 
