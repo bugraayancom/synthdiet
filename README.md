@@ -1,5 +1,10 @@
 # synthdiet
 
+[![PyPI version](https://img.shields.io/pypi/v/synthdiet.svg)](https://pypi.org/project/synthdiet/)
+[![Python versions](https://img.shields.io/pypi/pyversions/synthdiet.svg)](https://pypi.org/project/synthdiet/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![CI](https://github.com/bugraayancom/synthdiet/actions/workflows/ci.yml/badge.svg)](https://github.com/bugraayancom/synthdiet/actions/workflows/ci.yml)
+
 A Python library for generating synthetic patients with realistic clinical
 conditions and simulating dietary interventions on them.
 
@@ -74,7 +79,16 @@ patients before bringing them to a clinic.
 ## Installation
 
 ```bash
-pip install -e ".[dev,viz]"
+pip install synthdiet
+```
+
+Optional extras:
+
+```bash
+pip install "synthdiet[viz]"     # matplotlib visualisations
+pip install "synthdiet[causal]"  # networkx DAG export
+pip install "synthdiet[docs]"    # Sphinx + furo + myst-parser
+pip install "synthdiet[dev]"     # pytest + ruff + mypy + matplotlib
 ```
 
 `synthdiet` requires Python 3.9+ and depends on `numpy`, `pandas`, and `scipy`.
